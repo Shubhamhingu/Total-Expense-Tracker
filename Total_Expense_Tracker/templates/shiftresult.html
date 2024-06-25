@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift Result</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Dark mode styles */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 1000px; /* Adjusted to fit a larger table */
+            margin: 0 auto; /* Center the container */
+        }
+        .form-control, .form-check-input, .form-check-label, .btn {
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #444;
+        }
+        .form-control::placeholder, .form-check-input::placeholder {
+            color: #aaa;
+        }
+        .form-control:focus, .form-check-input:focus {
+            background-color: #444;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+        .btn-primary {
+            background-color: #3a3a3a;
+            border-color: #555;
+        }
+        .btn-primary:hover {
+            background-color: #555;
+            border-color: #666;
+        }
+        .alert-danger {
+            background-color: #660000;
+            color: #fff;
+        }
+        /* Modal styles */
+        .modal-content {
+            background-color: #333; /* Modal background color */
+            color: #e0e0e0; /* Text color inside modal */
+            border: 1px solid #444;
+        }
+        .modal-header {
+            border-bottom: 1px solid #444;
+        }
+        .modal-title {
+            color: #e0e0e0; /* Title color inside modal */
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            border-top: 1px solid #444;
+        }
+        .btn-secondary, .btn-secondary:hover {
+            background-color: #555;
+            border-color: #555;
+        }
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #444;
+            text-align: left;
+            font-size: 14px; /* Default text size */
+        }
+        th {
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 18px; /* Header text size */
+        }
+        tr:nth-child(even) {
+            background-color: #2e2e2e;
+        }
+        tr:nth-child(odd) {
+            background-color: #1e1e1e;
+        }
+        tr:hover {
+            background-color: #444;
+        }
+        /* Responsive styling */
+        @media (max-width: 576px) {
+            .container {
+                padding: 10px;
+            }
+            table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 14px; /* Adjust text size for small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <body>
+        <div class="container form-container">
+            <h2>Shift Query</h2>
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.start_date.label_tag }}
+                    {{ form.start_date }}
+                </div>
+                <div class="form-group">
+                    {{ form.end_date.label_tag }}
+                    {{ form.end_date }}
+                </div>
+                <div class="form-group">
+                    {{ form.shift_type.label_tag }}
+                    {{ form.shift_type }}
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            {% if errors %}
+                <div class="alert alert-danger mt-3">
+                    <p>Errors:</p>
+                    <ul>
+                        {% for label, error in errors.items %}
+                            <li>{{ label }}: {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <!-- Success pop-up modal -->
+            {% if data_submitted %}
+            <div class="modal" tabindex="-1" role="dialog" id="successModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Success</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p>Data Submitted</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                // Show the success modal when the page loads
+                window.onload = function() {
+                    $('#successModal').modal('show');
+                }
+            </script>
+            {% endif %}
+        </div>
+    {% if data_submitted %}
+    <div class="container">
+        {% if rows %}
+        <h1>Search Results</h1>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>In Time</th>
+                        <th>Out Time</th>
+                        <th>Hrss Worked</th>
+                        <th>Exp Pay</th>
+                        <th>Tip</th>
+                        <th>Ride</th>
+                        <th>Gross Pay</th>
+                        <th>Per Hr Avg</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        <td>{{ row.0 }}</td>
+                        <td>{{ row.1 }}</td>
+                        <td>{{ row.2 }}</td>
+                        <td>{{ row.3 }}$</td>
+                        <td>{{ row.4 }}$</td>
+                        <td>{{ row.5 }}$</td>
+                        <td>{{ row.6 }}$</td>
+                        <td>{{ row.7 }}$</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="2"><u><b>Totals:</b></u></td>
+                        <td>{{ finalData.0 }}</td>
+                        <td>{{ finalData.1 }}$</td>
+                        <td>{{ finalData.2 }}$</td>
+                        <td>{{ finalData.3 }}$</td>
+                        <td>{{ finalData.4 }}$</td>
+                        <td>{{ finalData.5 }}$</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <!-- No data found modal -->
+        <div class="modal" tabindex="-1" role="dialog" id="noDataFoundModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">No Data Found</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>No data found for the respective Input.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // Show the no data found modal when the page loads
+            window.onload = function() {
+                $('#noDataFoundModal').modal('show');
+            }
+        </script>
+        {% endif %}
+    </div>
+    {% endif %}
+
+
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

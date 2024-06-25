@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Form</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Dark mode styles */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px; /* Adjusted to fit better on mobile */
+            margin: 0 auto; /* Center the container */
+        }
+        .form-control, .form-check-input, .form-check-label, .btn {
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #444;
+        }
+        .form-control::placeholder, .form-check-input::placeholder {
+            color: #aaa;
+        }
+        .form-control:focus, .form-check-input:focus {
+            background-color: #444;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+        .btn-primary {
+            background-color: #3a3a3a;
+            border-color: #555;
+        }
+        .btn-primary:hover {
+            background-color: #555;
+            border-color: #666;
+        }
+        .alert-danger {
+            background-color: #660000;
+            color: #fff;
+        }
+        /* Modal styles */
+        .modal-content {
+            background-color: #333; /* Modal background color */
+            color: #e0e0e0; /* Text color inside modal */
+            border: 1px solid #444;
+        }
+        .modal-header {
+            border-bottom: 1px solid #444;
+        }
+        .modal-title {
+            color: #e0e0e0; /* Title color inside modal */
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            border-top: 1px solid #444;
+        }
+        .btn-secondary, .btn-secondary:hover {
+            background-color: #555;
+            border-color: #555;
+        }
+        /* Responsive styling */
+        @media (max-width: 576px) {
+            .container {
+                padding: 10px;
+            }
+            table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container form-container">
+        <h1>Transaction Form</h1>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Transaction Type:</label><br>
+                {% for opt in form.is_credit %}
+                    <div class="form-check form-check-inline">
+                        {{ opt }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="tip">Amount:</label>
+                {{ form.amount }}
+            </div>
+            <div class="form-group">
+                <label>Transaction Mode:</label><br>
+                {% for opt in form.is_cash %}
+                    <div class="form-check form-check-inline">
+                        {{ opt }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="tip">Description:</label>
+                {{ form.type }}
+            </div>
+            <div class="form-group" id="other-type-div" style="display: none;">
+                <label for="tip">Please, Describe:</label>
+                {{ form.other_type }}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% if errors %}
+            <div class="alert alert-danger mt-3">
+                <p>Errors:</p>
+                <ul>
+                    {% for label, error in errors.items %}
+                        <li>{{ label }}: {{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <!-- Success pop-up modal -->
+        {% if data_submitted %}
+        <div class="modal" tabindex="-1" role="dialog" id="successModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Success</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Data Submitted</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // Show the success modal when the page loads
+            window.onload = function() {
+                $('#successModal').modal('show');
+            }
+        </script>
+        {% endif %}
+    </div>
+    <!-- Add Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var typeSelect = document.getElementById("id_type");
+            var otherTypeDiv = document.getElementById("other-type-div");
+
+            typeSelect.addEventListener("change", function() {
+                if (this.value === "Other") {
+                    otherTypeDiv.style.display = "block";
+                } else {
+                    otherTypeDiv.style.display = "none";
+                }
+            });
+
+            // Trigger the change event to handle the case when the form is loaded with "Other" selected
+            typeSelect.dispatchEvent(new Event("change"));
+        });
+    </script>
+</body>
+</html>

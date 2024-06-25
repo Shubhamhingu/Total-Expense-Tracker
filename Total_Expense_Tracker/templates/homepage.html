@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker Homepage</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Existing CSS styles */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto; /* Center the form */
+        }
+        /* Add your additional styles here */
+        .homepage-container {
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .homepage-heading {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .homepage-subheading {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+        .homepage-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .homepage-link {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .homepage-link:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="homepage-container">
+            <h1 class="homepage-heading">Welcome to Expense Tracker</h1>
+            <p class="homepage-subheading">Track your expenses efficiently</p>
+            <div class="homepage-links">
+                <a href="/add_transaction/" class="homepage-link">Add Transaction</a>
+                <a href="/add_shift/" class="homepage-link">Add Shifts</a>
+                <a href="/transactionresult/" class="homepage-link">View Transactions</a>
+                <a href="/shiftresult/" class="homepage-link">View Shift Information</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
