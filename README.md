@@ -25,4 +25,12 @@ A full-stack Django application that allows users to track and manage their pers
 ---
 
 ## 🗂 Project Structure
+```
+├── Expense_Tracker/ # Main Django project settings
+├── Total_Expense_Tracker/ # Core application with models, views, templates
+├── db.sqlite3 # Local database
+├── manage.py # Django management script
+├── requirements.txt # Dependencies for the project
+└── README.md
+```
 
